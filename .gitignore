@@ -1,0 +1,5 @@
+# Editor files
+.idea
+*~
+*.bkp
+*.tmp

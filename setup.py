@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import subprocess
 
 
 class Installer:
@@ -28,10 +29,17 @@ class Installer:
     @depends_on('powerline', 'vundle')
     def setup_vim(self):
         print('Setting up VIM')
+        # TODO Ensure vim is actually installed
+        # TODO Link vim config
+        # TODO Install plugins
+        # TODO powerline vim config
 
     @depends_on()
     def setup_powerline(self):
         print('Setting up powerline')
+        subprocess.check_call('pip install --user --upgrade git+git://github.com/powerline/powerline'.split())
+        # TODO powerline fonts
+        # -- remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
     @depends_on()
     def setup_vundle(self):
@@ -57,14 +65,6 @@ def _parse_cmdline():
 def _main():
     # TODO:
     # -- xdg config: link config to ~/.config/user-dirs.dirs and call xdg-user-dirs-update
-    # -- powerline:
-    #    -- pip install --user git+git://github.com/powerline/powerline
-    #    -- remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
-    #    -- config
-    # -- vim:
-    #    -- get Vundle
-    #    -- link vimrc
-    #    -- install plugins
     # -- bashrc
     # -- .profile
     args = _parse_cmdline()

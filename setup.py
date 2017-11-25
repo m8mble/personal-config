@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 
@@ -14,8 +14,8 @@ class Installer:
             getattr(self, 'setup_{:}'.format(str(step)))()
 
     def depends_on(*requirements):
-       """ Builds decorator that ensures setup for requirements.
-       """
+        """ Builds decorator that ensures setup for requirements.
+        """
         def decorator(installer):
             def wrapper(self):
                 self.setup(*requirements) # First our requirements
@@ -27,15 +27,15 @@ class Installer:
 
     @depends_on('powerline', 'vundle')
     def setup_vim(self):
-        print 'Setting up VIM'
+        print('Setting up VIM')
 
     @depends_on()
     def setup_powerline(self):
-        print 'Setting up powerline'
+        print('Setting up powerline')
 
     @depends_on()
     def setup_vundle(self):
-        print 'Setting up vundle'
+        print('Setting up vundle')
 
 
 ####################################################################################

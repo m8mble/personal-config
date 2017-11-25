@@ -55,9 +55,9 @@ def _parse_cmdline():
     return args
 
 def _main():
-    # TODO: 
+    # TODO:
     # -- xdg config: link config to ~/.config/user-dirs.dirs and call xdg-user-dirs-update
-    # -- powerline: 
+    # -- powerline:
     #    -- pip install --user git+git://github.com/powerline/powerline
     #    -- remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
     #    -- config

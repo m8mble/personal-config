@@ -37,7 +37,7 @@ class Installer:
     @depends_on()
     def setup_powerline(self):
         print('Setting up powerline')
-        subprocess.check_call('pip install --user --upgrade git+git://github.com/powerline/powerline'.split())
+        subprocess.check_call('pip install --user --upgrade powerline-status'.split())
         # TODO powerline fonts
         # -- remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 

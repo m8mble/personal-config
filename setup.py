@@ -36,10 +36,23 @@ class Installer:
 
     @depends_on()
     def setup_powerline(self):
-        print('Setting up powerline')
+        print('Updating powerline')
         subprocess.check_call('pip install --user --upgrade powerline-status'.split())
-        # TODO powerline fonts
-        # -- remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
+
+        # Get powerline fonts
+        font_repo = pathlib.Path.home() / 'software' / 'powerline-fonts'
+        font_repo.mkdir(parents=True, exist_ok=True)
+        if (font_repo / '.git').exists():
+            print('Updating powerline fonts')
+            subprocess.check_call('git pull'.split(), cwd=font_repo)
+        else:
+            print('Cloning powerline fonts')
+            subprocess.check_call('git clone --depth=1 https://github.com/powerline/fonts.git'.split() + [str(font_repo)])
+
+        print('Installing powerline fonts')
+        subprocess.check_call('bash install.sh'.split(), cwd=font_repo)
+
+        #TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
     @depends_on()
     def setup_vundle(self):

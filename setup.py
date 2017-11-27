@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
+import pathlib
 import subprocess
 
 
 class Installer:
     def __init__(self):
         self.done = set() # set of installers already executed
+        self.backup_dir = pathlib.Path.cwd() / 'backup' # where we save conflicting files
 
     def setup(self, *steps):
         """ Setup main method: Calls setup_* handlers for specified steps.
@@ -25,6 +27,17 @@ class Installer:
                     self.done.add(installer.__name__)
             return wrapper
         return decorator
+
+    def _link_config(self, src, tgt):
+        # Save conflicts if any
+        if tgt.exists() and tgt.resolve() != src:
+            print('   {:} exists; saving backup.'.format(tgt))
+            self.backup_dir.mkdir(parents=False, exist_ok=True)
+            tgt.rename(self.backup_dir / tgt.name)
+        # Ensure link (if not already ok)
+        if not tgt.exists():
+            tgt.symlink_to(src)
+
 
     @depends_on('powerline', 'vundle')
     def setup_vim(self):

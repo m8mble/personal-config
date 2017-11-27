@@ -71,7 +71,7 @@ class Installer:
     def setup_vundle(self):
         print('Setting up vundle')
 
-    @depends_on()
+    @depends_on('powerline')
     def setup_bash(self):
         print('Setting up bash config')
         self._link_config(pathlib.Path.cwd() / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')

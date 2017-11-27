@@ -20,3 +20,9 @@ alias fgrpe='fgrep --color=tty -d skip'
 alias grep='grep --color=tty -d skip'
 alias grpe='grep --color=tty -d skip'
 
+############################################
+# PS1 section
+##
+POWERLINE_ROOT="$(find "/home/$(whoami)/.local/lib/" -maxdepth 3 -name powerline -type d  | sort -V | tail -1)"
+source "${POWERLINE_ROOT}/bindings/bash/powerline.sh"
+

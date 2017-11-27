@@ -1,0 +1,22 @@
+############################################
+# path section
+##
+export LD_LIBRARY_PATH="/home/$(whoami)/.local/lib/:/home/$(whoami)/software/lib64/:${LD_LIBRARY_PATH}"
+export PATH="/home/$(whoami)/bin:/home/$(whoami)/.local/bin:/home/$(whoami)/software/bin:${PATH}"
+
+
+############################################
+# alias section
+##
+alias ls='ls --color=auto'
+alias ll='ls -l --color=auto'
+alias la='ls -la --color=auto'
+alias lr='ls -ltrah --color=auto'
+
+alias egrep='egrep --color=tty -d skip'
+alias egrpe='egrep --color=tty -d skip'
+alias fgrep='fgrep --color=tty -d skip'
+alias fgrpe='fgrep --color=tty -d skip'
+alias grep='grep --color=tty -d skip'
+alias grpe='grep --color=tty -d skip'
+

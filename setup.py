@@ -71,6 +71,11 @@ class Installer:
     def setup_vundle(self):
         print('Setting up vundle')
 
+    @depends_on()
+    def setup_bash(self):
+        print('Setting up bash config')
+        self._link_config(pathlib.Path.cwd() / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
+
 
 ####################################################################################
 
@@ -78,6 +83,7 @@ class Installer:
 def _load_parser():
     parser = argparse.ArgumentParser(description='Create my favorite environment.')
     parser.add_argument('--vim', help='Setup vim config.', action='store_true')
+    parser.add_argument('--bash', help='Setup bash config.', action='store_true')
     return parser
 
 def _parse_cmdline():

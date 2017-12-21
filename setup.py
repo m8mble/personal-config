@@ -65,6 +65,9 @@ class Installer:
         print('Installing powerline fonts')
         subprocess.check_call('bash install.sh'.split(), cwd=font_repo)
 
+        print('Setting up powerline config')
+        self._link_config(pathlib.Path.cwd() / 'powerline', pathlib.Path.home() / '.config' / 'powerline')
+
         #TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
     @depends_on()

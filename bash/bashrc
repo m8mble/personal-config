@@ -24,5 +24,8 @@ alias grpe='grep --color=tty -d skip'
 # PS1 section
 ##
 POWERLINE_ROOT="$(find "${HOME}/.local/lib/" -maxdepth 3 -name powerline -type d  | sort -V | tail -1)"
+powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
 source "${POWERLINE_ROOT}/bindings/bash/powerline.sh"
 

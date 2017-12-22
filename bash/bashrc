@@ -1,8 +1,8 @@
 ############################################
 # path section
 ##
-export LD_LIBRARY_PATH="/home/$(whoami)/.local/lib/:/home/$(whoami)/software/lib64/:${LD_LIBRARY_PATH}"
-export PATH="/home/$(whoami)/bin:/home/$(whoami)/.local/bin:/home/$(whoami)/software/bin:${PATH}"
+export LD_LIBRARY_PATH="${HOME}/.local/lib/:${HOME}/software/lib64/:${LD_LIBRARY_PATH}"
+export PATH="${HOME}/bin:${HOME}/.local/bin:${HOME}/software/bin:${PATH}"
 
 
 ############################################
@@ -23,6 +23,6 @@ alias grpe='grep --color=tty -d skip'
 ############################################
 # PS1 section
 ##
-POWERLINE_ROOT="$(find "/home/$(whoami)/.local/lib/" -maxdepth 3 -name powerline -type d  | sort -V | tail -1)"
+POWERLINE_ROOT="$(find "${HOME}/.local/lib/" -maxdepth 3 -name powerline -type d  | sort -V | tail -1)"
 source "${POWERLINE_ROOT}/bindings/bash/powerline.sh"
 

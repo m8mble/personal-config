@@ -29,3 +29,12 @@ POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
 source "${POWERLINE_ROOT}/bindings/bash/powerline.sh"
 
+
+############################################
+# Source local overwrites if present
+##
+BASHRC_LOCAL="${HOME}/.bashrc.local"
+if [ -f "${BASHRC_LOCAL}" ]
+then
+    source "${BASHRC_LOCAL}"
+fi

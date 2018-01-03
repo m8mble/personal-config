@@ -8,7 +8,9 @@ import subprocess
 class Installer:
     def __init__(self):
         self.done = set() # set of installers already executed
-        self.backup_dir = pathlib.Path.cwd() / 'backup' # where we save conflicting files
+
+        self.install_source = pathlib.Path(__file__).parent.resolve()
+        self.backup_dir = self.install_source / 'backup' # where we save conflicting files
         self.vim_bundle = pathlib.Path.home() / '.vim' / 'bundle'  # home to vim plugins
 
     def setup(self, *steps):
@@ -50,7 +52,7 @@ class Installer:
     def setup_vim(self):
         print('Setting up vim')
         # TODO Ensure vim is actually installed
-        local = pathlib.Path.cwd() / 'vim'
+        local = self.install_source / 'vim'
         installed = pathlib.Path.home() / '.vim'
         self._link_config(local / 'vimrc', installed / 'vimrc')
         # TODO Link vim config
@@ -75,7 +77,7 @@ class Installer:
         subprocess.check_call('bash install.sh'.split(), cwd=font_repo)
 
         print('Setting up powerline config')
-        self._link_config(pathlib.Path.cwd() / 'powerline', pathlib.Path.home() / '.config' / 'powerline')
+        self._link_config(self.install_source / 'powerline', pathlib.Path.home() / '.config' / 'powerline')
 
         #TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
@@ -95,7 +97,7 @@ class Installer:
     @depends_on('powerline')
     def setup_bash(self):
         print('Setting up bash config')
-        self._link_config(pathlib.Path.cwd() / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
+        self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
 
 ####################################################################################
@@ -120,7 +122,6 @@ def _main():
     # -- xdg config: link config to ~/.config/user-dirs.dirs and call xdg-user-dirs-update
     # -- bashrc
     # -- .profile
-    # -- don't ever use cwd but rather the home of this file
     args = _parse_cmdline()
     Installer().setup(*[k for k, v in args.items() if v])
 

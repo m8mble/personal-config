@@ -109,6 +109,7 @@ def _main():
     # -- xdg config: link config to ~/.config/user-dirs.dirs and call xdg-user-dirs-update
     # -- bashrc
     # -- .profile
+    # -- don't ever use cwd but rather the home of this file
     args = _parse_cmdline()
     Installer().setup(*[k for k, v in args.items() if v])
 

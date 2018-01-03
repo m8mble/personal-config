@@ -1,0 +1,51 @@
+" Load pathogen
+execute pathogen#infect()
+
+syntax on
+
+set nofoldenable
+set number
+set sts=3
+filetype indent on
+set et
+set sw=3
+set hls
+"set fo=qrotcnl1
+set bs=indent,eol,start
+set list
+
+if v:version >= 700
+   set lcs=trail:·,precedes:«,extends:»,nbsp:◊,tab:»·
+else
+   set listchars=tab:>-,trail:-
+endif
+
+autocmd FileType c call MyC()
+autocmd FileType cpp call MyC()
+
+nmap <F8>      :noh<CR>
+imap <F8> <C-O>:noh<CR>
+
+map  <Up>        gk
+imap <Up>   <C-O>gk
+map  <Down>      gj
+imap <Down> <C-O>gj
+
+fu MyC()
+   set cindent
+   set cino=(0,W1s,m1
+endfunction
+
+set expandtab       "Use softtabstop spaces instead of tab characters for indentation
+set shiftwidth=3    "Indent by 4 spaces when using >>, <<, == etc.
+set softtabstop=3   "Indent by 4 spaces when pressing <TAB>
+
+set autoindent      "Keep indentation from previous line
+set smartindent     "Automatically inserts indentation in some cases
+set cindent         "Like smartindent, but stricter and more customisable
+
+autocmd Filetype gitcommit setlocal textwidth=72
+autocmd Filetype python setlocal shiftwidth=4 softtabstop=4 tabstop=8
+
+autocmd BufWritePre * %s/\s\+$//e    "Remove trailing whitespace on save
+

@@ -9,6 +9,7 @@ class Installer:
     def __init__(self):
         self.done = set() # set of installers already executed
         self.backup_dir = pathlib.Path.cwd() / 'backup' # where we save conflicting files
+        self.vim_bundle = pathlib.Path.home() / '.vim' / 'bundle'  # home to vim plugins
 
     def setup(self, *steps):
         """ Setup main method: Calls setup_* handlers for specified steps.
@@ -39,12 +40,14 @@ class Installer:
             tgt.symlink_to(src)
 
 
-    @depends_on('powerline', 'vundle')
+    @depends_on('powerline', 'vim_pathogen')
     def setup_vim(self):
-        print('Setting up VIM')
+        print('Setting up vim')
         # TODO Ensure vim is actually installed
+        local = pathlib.Path.cwd() / 'vim'
+        installed = pathlib.Path.home() / '.vim'
+        self._link_config(local / 'vimrc', installed / 'vimrc')
         # TODO Link vim config
-        # TODO Install plugins
         # TODO powerline vim config
 
     @depends_on()
@@ -71,8 +74,12 @@ class Installer:
         #TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
     @depends_on()
-    def setup_vundle(self):
-        print('Setting up vundle')
+    def setup_vim_pathogen(self):
+        print('Setting up vim-pathogen')
+        self.vim_bundle.mkdir(exist_ok=True, parents=True)
+        autoload = self.vim_bundle / '..' / 'autoload'
+        autoload.mkdir(exist_ok=True, parents=True)
+        subprocess.check_call(['curl', '-LSso', autoload / 'pathogen.vim', 'https://tpo.pe/pathogen.vim'])
 
     @depends_on('powerline')
     def setup_bash(self):

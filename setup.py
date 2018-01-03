@@ -85,7 +85,7 @@ class Installer:
     def setup_vim_pathogen(self):
         print('Setting up vim-pathogen')
         self.vim_bundle.mkdir(exist_ok=True, parents=True)
-        autoload = self.vim_bundle / '..' / 'autoload'
+        autoload = self.vim_bundle.parent / 'autoload'
         autoload.mkdir(exist_ok=True, parents=True)
         subprocess.check_call(['curl', '-LSso', autoload / 'pathogen.vim', 'https://tpo.pe/pathogen.vim'])
 

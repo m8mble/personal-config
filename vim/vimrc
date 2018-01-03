@@ -1,7 +1,12 @@
 " Load pathogen
 execute pathogen#infect()
 
-syntax on
+syntax enable
+" Enable solarized light colors
+set background=light
+" Enable "degraded 256" colorscheme until my terminal deals with this.
+let g:solarized_termcolors=256
+colorscheme solarized
 
 set nofoldenable
 set number

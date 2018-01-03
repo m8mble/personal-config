@@ -39,8 +39,14 @@ class Installer:
         if not tgt.exists():
             tgt.symlink_to(src)
 
+    @staticmethod
+    def _update_git(src, tgt):
+        if tgt.exists():
+            subprocess.check_call(['git', 'pull'], cwd=tgt)
+        else:
+            subprocess.check_call(['git', 'clone', src, tgt])
 
-    @depends_on('powerline', 'vim_pathogen')
+    @depends_on('powerline', 'vim_pathogen', 'vim_colors_solarized')
     def setup_vim(self):
         print('Setting up vim')
         # TODO Ensure vim is actually installed
@@ -80,6 +86,11 @@ class Installer:
         autoload = self.vim_bundle / '..' / 'autoload'
         autoload.mkdir(exist_ok=True, parents=True)
         subprocess.check_call(['curl', '-LSso', autoload / 'pathogen.vim', 'https://tpo.pe/pathogen.vim'])
+
+    @depends_on('vim_pathogen')
+    def setup_vim_colors_solarized(self):
+        print('Setting up vim-colors-solarized')
+        self._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
 
     @depends_on('powerline')
     def setup_bash(self):

@@ -93,7 +93,7 @@ class Installer:
     def setup_vim_colors_solarized(self):
         self._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
 
-    @depends_on('powerline', 'kde')
+    @depends_on('powerline', 'dircolors', 'kde')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
@@ -104,6 +104,11 @@ class Installer:
                 git_tgt = pathlib.Path(workarea).resolve() / 'kde-colors-solarized'
                 Installer._update_git('https://github.com/hayalci/kde-colors-solarized.git', git_tgt)
                 subprocess.check_call(['bash', 'install.sh'], cwd=git_tgt)
+
+    def setup_dircolors(self):
+        install_dir = pathlib.Path.home() / '.config' / 'dircolors-solarized'
+        Installer._update_git('https://github.com/seebi/dircolors-solarized.git', install_dir)
+        self._link_config(install_dir / 'dircolors.256dark', pathlib.Path.home() / '.dircolors')
 
 
 ####################################################################################

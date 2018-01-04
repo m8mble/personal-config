@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+import glob
 import pathlib
 import subprocess
+import tempfile
 
 
 class Installer:
@@ -91,9 +93,17 @@ class Installer:
     def setup_vim_colors_solarized(self):
         self._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
 
-    @depends_on('powerline')
+    @depends_on('powerline', 'kde')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
+
+    def setup_kde(self):
+        search = pathlib.Path.home() / '.kde*' / 'share' / 'apps' / 'konsole' / 'Solarized*.colorscheme'
+        if not glob.glob(str(search)):  # Check that we didn't install already
+            with tempfile.TemporaryDirectory() as workarea:
+                git_tgt = pathlib.Path(workarea).resolve() / 'kde-colors-solarized'
+                Installer._update_git('https://github.com/hayalci/kde-colors-solarized.git', git_tgt)
+                subprocess.check_call(['bash', 'install.sh'], cwd=git_tgt)
 
 
 ####################################################################################

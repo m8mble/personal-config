@@ -51,7 +51,7 @@ class Installer:
         else:
             subprocess.check_call(['git', 'clone', src, tgt])
 
-    @depends_on('powerline', 'vim_pathogen', 'vim_colors_solarized')
+    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized')
     def setup_vim(self):
         # TODO Ensure vim is actually installed
         local = self.install_source / 'vim'
@@ -92,6 +92,12 @@ class Installer:
     @depends_on('vim_pathogen')
     def setup_vim_colors_solarized(self):
         self._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
+
+    @depends_on('powerline')
+    def setup_vim_powerline(self):
+        installs = glob.glob(str(pathlib.Path.home() / '.local' / '**' / 'powerline' / 'bindings' / 'vim'), recursive=True)
+        assert len(installs) == 1, 'Can\'t select among powerline installs {:}'.format(installs)
+        self._link_config(pathlib.Path(installs[0]), self.vim_bundle / 'vim-powerline')
 
     @depends_on('powerline', 'dircolors', 'kde')
     def setup_bash(self):

@@ -26,6 +26,7 @@ class Installer:
             def wrapper(self):
                 self.setup(*requirements) # First our requirements
                 if installer.__name__ not in self.done: # Now actual work iff needed
+                    print('Installing {:}'.format(installer.__name__.replace('setup_', '').replace('_', '-')))
                     installer(self)
                     self.done.add(installer.__name__)
             return wrapper
@@ -50,7 +51,6 @@ class Installer:
 
     @depends_on('powerline', 'vim_pathogen', 'vim_colors_solarized')
     def setup_vim(self):
-        print('Setting up vim')
         # TODO Ensure vim is actually installed
         local = self.install_source / 'vim'
         installed = pathlib.Path.home() / '.vim'
@@ -60,7 +60,6 @@ class Installer:
 
     @depends_on()
     def setup_powerline(self):
-        print('Updating powerline')
         subprocess.check_call('pip install --user --upgrade powerline-status'.split())
 
         # Get powerline fonts
@@ -83,7 +82,6 @@ class Installer:
 
     @depends_on()
     def setup_vim_pathogen(self):
-        print('Setting up vim-pathogen')
         self.vim_bundle.mkdir(exist_ok=True, parents=True)
         autoload = self.vim_bundle.parent / 'autoload'
         autoload.mkdir(exist_ok=True, parents=True)
@@ -91,12 +89,10 @@ class Installer:
 
     @depends_on('vim_pathogen')
     def setup_vim_colors_solarized(self):
-        print('Setting up vim-colors-solarized')
         self._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
 
     @depends_on('powerline')
     def setup_bash(self):
-        print('Setting up bash config')
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
 

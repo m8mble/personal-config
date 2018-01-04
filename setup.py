@@ -94,7 +94,7 @@ class Installer:
 
     @depends_on('vim_pathogen')
     def setup_vim_colors_solarized(self):
-        self._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
+        Installer._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
 
     @depends_on('powerline')
     def setup_vim_powerline(self):

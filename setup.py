@@ -87,7 +87,10 @@ class Installer:
         self.vim_bundle.mkdir(exist_ok=True, parents=True)
         autoload = self.vim_bundle.parent / 'autoload'
         autoload.mkdir(exist_ok=True, parents=True)
-        subprocess.check_call(['curl', '-LSso', autoload / 'pathogen.vim', 'https://tpo.pe/pathogen.vim'])
+
+        install = self.vim_bundle / 'vim-pathogen'
+        Installer._update_git('https://github.com/tpope/vim-pathogen.git', install)
+        self._link_config(install / 'autoload' / 'pathogen.vim', autoload / 'pathogen.vim')
 
     @depends_on('vim_pathogen')
     def setup_vim_colors_solarized(self):

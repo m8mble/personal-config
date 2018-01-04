@@ -2,6 +2,7 @@
 
 import argparse
 import glob
+import os.path
 import pathlib
 import subprocess
 import tempfile
@@ -42,7 +43,7 @@ class Installer:
             tgt.rename(self.backup_dir / tgt.name)
         # Ensure link (if not already ok)
         if not tgt.exists():
-            tgt.symlink_to(src)
+            tgt.symlink_to(os.path.relpath(src, start=tgt.parent))
 
     @staticmethod
     def _update_git(src, tgt):

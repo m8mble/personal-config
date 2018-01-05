@@ -50,7 +50,7 @@ class Installer:
         if tgt.exists():
             subprocess.check_call(['git', 'pull'], cwd=tgt)
         else:
-            subprocess.check_call(['git', 'clone', src, tgt])
+            subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
 
     @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized', 'vim_python_syntax')
     def setup_vim(self):

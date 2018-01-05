@@ -17,14 +17,12 @@ class Installer:
         self.vim_bundle = pathlib.Path.home() / '.vim' / 'bundle'  # home to vim plugins
 
     def setup(self, *steps):
-        """ Setup main method: Calls setup_* handlers for specified steps.
-        """
+        """ Setup main method: Calls setup_* handlers for specified steps. """
         for step in steps:
             getattr(self, 'setup_{:}'.format(str(step)))()
 
     def depends_on(*requirements):
-        """ Builds decorator that ensures setup for requirements.
-        """
+        """ Builds decorator that ensures setup for requirements.  """
         def decorator(installer):
             def wrapper(self):
                 self.setup(*requirements) # First our requirements
@@ -36,6 +34,7 @@ class Installer:
         return decorator
 
     def _link_config(self, src, tgt):
+        """ Create new link at tgt referencing src. """
         # Save conflicts if any
         if tgt.exists() and tgt.resolve() != src:
             print('   {:} exists; saving backup.'.format(tgt))
@@ -47,6 +46,7 @@ class Installer:
 
     @staticmethod
     def _update_git(src, tgt):
+        """ Ensure a git clone of src at tgt. """
         if tgt.exists():
             subprocess.check_call(['git', 'pull'], cwd=tgt)
         else:

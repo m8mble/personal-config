@@ -52,7 +52,7 @@ class Installer:
         else:
             subprocess.check_call(['git', 'clone', src, tgt])
 
-    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized')
+    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized', 'vim_python_syntax')
     def setup_vim(self):
         # TODO Ensure vim is actually installed
         local = self.install_source / 'vim'
@@ -96,6 +96,10 @@ class Installer:
     @depends_on('vim_pathogen')
     def setup_vim_colors_solarized(self):
         Installer._update_git('git://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
+
+    @depends_on('vim_pathogen')
+    def setup_vim_python_syntax(self):
+        Installer._update_git('https://github.com/hdima/python-syntax.git', self.vim_bundle / 'vim-python-syntax')
 
     @depends_on('powerline')
     def setup_vim_powerline(self):

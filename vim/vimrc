@@ -6,6 +6,9 @@ syntax enable
 set background=dark
 colorscheme solarized
 
+" Enable python syntax highlighting
+let python_highlight_all = 1
+
 set nofoldenable
 set number
 set sts=3

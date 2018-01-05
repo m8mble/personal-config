@@ -52,7 +52,7 @@ class Installer:
         else:
             subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
 
-    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized', 'vim_python_syntax')
+    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized', 'vim_python_syntax', 'vim_you_complete_me')
     def setup_vim(self):
         # TODO Ensure vim is actually installed
         local = self.install_source / 'vim'
@@ -106,6 +106,22 @@ class Installer:
         installs = glob.glob(str(pathlib.Path.home() / '.local' / '**' / 'powerline' / 'bindings' / 'vim'), recursive=True)
         assert len(installs) == 1, 'Can\'t select among powerline installs {:}'.format(installs)
         self._link_config(pathlib.Path(installs[0]), self.vim_bundle / 'vim-powerline')
+
+    @depends_on('vim_pathogen')
+    def setup_vim_you_complete_me(self):
+        install = self.vim_bundle / 'vim-you-complete-me'
+        Installer._update_git('https://github.com/Valloric/YouCompleteMe.git', install)
+
+        build = self.vim_bundle.parent / 'ycm-build'
+        build.mkdir(exist_ok=True)
+        # configure
+        subprocess.check_call([
+            'cmake', '-G', 'Unix Makefiles',
+            '-DPATH_TO_LLVM_ROOT=/usr/', '-DUSE_PYTHON2=OFF',
+            build, install / 'third_party' / 'ycmd' / 'cpp'], cwd=build)
+        # build
+        subprocess.check_call(['cmake', '--build', build, '--target', 'ycm_core', '--config',  'Release'], cwd=build)
+
 
     @depends_on('powerline', 'dircolors', 'kde')
     def setup_bash(self):

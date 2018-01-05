@@ -9,6 +9,10 @@ colorscheme solarized
 " Enable python syntax highlighting
 let python_highlight_all = 1
 
+" YouCompleteMe config
+" Disable identifier completer (popup as you type)
+let g:ycm_min_num_of_chars_for_completion=999
+
 set nofoldenable
 set number
 set sts=3

@@ -52,7 +52,7 @@ class Installer:
         else:
             subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
 
-    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colors_solarized', 'vim_python_syntax', 'vim_you_complete_me')
+    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colorschemes', 'vim_python_syntax', 'vim_you_complete_me')
     def setup_vim(self):
         # TODO Ensure vim is actually installed
         local = self.install_source / 'vim'
@@ -94,8 +94,9 @@ class Installer:
         self._link_config(install / 'autoload' / 'pathogen.vim', autoload / 'pathogen.vim')
 
     @depends_on('vim_pathogen')
-    def setup_vim_colors_solarized(self):
-        Installer._update_git('https://github.com/altercation/vim-colors-solarized.git', self.vim_bundle / 'vim-colors-solarized')
+    def setup_vim_colorschemes(self):
+        for github, tgt in [('zeis/vim-kolor', 'vim-kolor'), ('morhetz/gruvbox', 'vim-gruvbox'), ('joshdick/onedark.vim', 'vim-onedark')]:
+            Installer._update_git('https://github.com/{:}.git'.format(github), self.vim_bundle / tgt)
 
     @depends_on('vim_pathogen')
     def setup_vim_python_syntax(self):
@@ -123,7 +124,7 @@ class Installer:
         subprocess.check_call(['cmake', '--build', build, '--target', 'ycm_core', '--config',  'Release'], cwd=build)
 
 
-    @depends_on('powerline', 'dircolors', 'kde')
+    @depends_on('powerline')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
@@ -134,11 +135,6 @@ class Installer:
                 git_tgt = pathlib.Path(workarea).resolve() / 'kde-colors-solarized'
                 Installer._update_git('https://github.com/hayalci/kde-colors-solarized.git', git_tgt)
                 subprocess.check_call(['bash', 'install.sh'], cwd=git_tgt)
-
-    def setup_dircolors(self):
-        install_dir = pathlib.Path.home() / '.config' / 'dircolors-solarized'
-        Installer._update_git('https://github.com/seebi/dircolors-solarized.git', install_dir)
-        self._link_config(install_dir / 'dircolors.256dark', pathlib.Path.home() / '.dircolors')
 
 
 ####################################################################################

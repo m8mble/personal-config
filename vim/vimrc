@@ -2,9 +2,11 @@
 execute pathogen#infect()
 
 syntax enable
-" Enable solarized light colors
-set background=dark
-colorscheme solarized
+
+" Colorscheme options
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_contrast_light='hard'
+colorscheme onedark
 
 " Enable python syntax highlighting
 let python_highlight_all = 1

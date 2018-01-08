@@ -13,7 +13,7 @@ let python_highlight_all = 1
 
 " YouCompleteMe config
 " Disable identifier completer (popup as you type)
-let g:ycm_min_num_of_chars_for_completion=999
+let g:ycm_min_num_of_chars_for_completion=3
 
 
 set laststatus=2  " Always display statusbar (ie. powerline)

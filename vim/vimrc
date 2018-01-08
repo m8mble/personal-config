@@ -78,7 +78,8 @@ set cindent         "Like smartindent, but stricter and more customisable
 autocmd Filetype gitcommit setlocal textwidth=72
 autocmd Filetype python setlocal shiftwidth=4 softtabstop=4 tabstop=8
 
-autocmd BufWritePre * %s/\s\+$//e    "Remove trailing whitespace on save
+autocmd BufWritePre * %s/\s\+$//e  "Remove trailing whitespace on save
+autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>120v.\+', -1)  " Highlight lines longer than 120 chars
 
 function TextModeConfig()
   if exists("b:textmodeenabled") && b:textmodeenabled==1

@@ -15,6 +15,11 @@ let python_highlight_all = 1
 " Disable identifier completer (popup as you type)
 let g:ycm_min_num_of_chars_for_completion=3
 
+" Filebrowsing (netrw) config
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
 
 set laststatus=2  " Always display statusbar (ie. powerline)
 set cursorline  " Highlight line where cursor currently is

@@ -52,13 +52,12 @@ class Installer:
         else:
             subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
 
-    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colorschemes', 'vim_python_syntax', 'vim_you_complete_me')
+    @depends_on('vim_pathogen', 'vim_powerline', 'vim_colorschemes', 'vim_python_syntax', 'vim_you_complete_me', 'vim_command_T')
     def setup_vim(self):
         # TODO Ensure vim is actually installed
         local = self.install_source / 'vim'
         installed = pathlib.Path.home() / '.vim'
         self._link_config(local / 'vimrc', installed / 'vimrc')
-        # TODO Link vim config
         # TODO powerline vim config
 
     @depends_on()
@@ -123,6 +122,12 @@ class Installer:
         # build
         subprocess.check_call(['cmake', '--build', build, '--target', 'ycm_core', '--config',  'Release'], cwd=build)
 
+    @depends_on('vim_pathogen')
+    def setup_vim_command_T(self):
+        install_dir = self.vim_bundle / 'vim-command-t'
+        Installer._update_git('https://github.com/wincent/Command-T.git', install_dir)
+        subprocess.check_call(['rake', 'make'], cwd=install_dir)
+        subprocess.check_call(['vim', '-c', 'execute pathogen#infect()', '-c', ':call pathogen#helptags()', '+qall'])
 
     @depends_on('powerline')
     def setup_bash(self):

@@ -28,11 +28,15 @@ let g:netrw_list_hide=netrw_gitignore#Hide()
 set laststatus=2  " Always display statusbar (ie. powerline)
 set cursorline  " Highlight line where cursor currently is
 
+
 " Custom keybinding
 imap <F8> <ESC><F8>
 cmap <F8> <ESC><F8>
 " Shortcut for writting in all (changed) buffers and building
 nmap <F8> :wa<CR>:make<CR>
+" Moving between tabs
+nmap <F5> :tabprevious<CR>
+nmap <F6> :tabnext<CR>
 
 set nocompatible  " Don't pretend to be vi
 set splitright  " Create vsp buffers to the right

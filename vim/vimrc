@@ -69,3 +69,16 @@ autocmd Filetype python setlocal shiftwidth=4 softtabstop=4 tabstop=8
 
 autocmd BufWritePre * %s/\s\+$//e    "Remove trailing whitespace on save
 
+function TextModeConfig()
+  if exists("b:textmodeenabled") && b:textmodeenabled==1
+    let b:textmodeenabled=0
+    set nospell
+    call youcompleteme#EnableCursorMovedAutocommands()
+  else
+    let b:textmodeenabled=1
+    set spell  " enable spellchecking
+    call youcompleteme#DisableCursorMovedAutocommands()  " Disable YouCompleteMe
+  endif
+endfunction
+command TextMode :call TextModeConfig()
+

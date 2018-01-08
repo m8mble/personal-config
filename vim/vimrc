@@ -30,6 +30,8 @@ imap <F8> <ESC><F8>
 nmap <F8> :wa<CR>:make<CR>
 
 set nocompatible  " Don't pretend to be vi
+set splitright  " Create vsp buffers to the right
+set splitbelow  " Create sp buffers to the bottom
 set nofoldenable
 set number
 set sts=3

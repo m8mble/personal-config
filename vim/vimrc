@@ -15,7 +15,12 @@ let python_highlight_all = 1
 " Disable identifier completer (popup as you type)
 let g:ycm_min_num_of_chars_for_completion=999
 
+
 set laststatus=2  " Always display statusbar (ie. powerline)
+
+" Custom keybinding
+imap <F8> <ESC><F8>
+nmap <F8> :make<CR>
 
 set nofoldenable
 set number
@@ -37,9 +42,7 @@ endif
 autocmd FileType c call MyC()
 autocmd FileType cpp call MyC()
 
-nmap <F8>      :noh<CR>
-imap <F8> <C-O>:noh<CR>
-
+" TODO: some shortcut for :noh<CR> to disable search highlighting
 map  <Up>        gk
 imap <Up>   <C-O>gk
 map  <Down>      gj

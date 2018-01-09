@@ -44,6 +44,7 @@ set splitbelow  " Create sp buffers to the bottom
 set nofoldenable
 set number  " Enable line numbers
 set sts=3
+filetype on
 filetype indent on
 set et
 set sw=3
@@ -82,6 +83,7 @@ set cindent         "Like smartindent, but stricter and more customisable
 
 autocmd Filetype gitcommit setlocal textwidth=72
 autocmd Filetype python setlocal shiftwidth=4 softtabstop=4 tabstop=8
+autocmd Filetype tex setlocal shiftwidth=1 softtabstop=1 tabstop=8
 autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
 autocmd BufWritePre * %s/\s\+$//e  "Remove trailing whitespace on save

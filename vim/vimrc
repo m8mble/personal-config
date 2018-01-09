@@ -42,7 +42,7 @@ set nocompatible  " Don't pretend to be vi
 set splitright  " Create vsp buffers to the right
 set splitbelow  " Create sp buffers to the bottom
 set nofoldenable
-set number
+set number  " Enable line numbers
 set sts=3
 filetype indent on
 set et

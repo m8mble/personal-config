@@ -6,6 +6,8 @@ syntax enable
 " Colorscheme options
 let g:gruvbox_contrast_dark='hard'
 let g:gruvbox_contrast_light='hard'
+set background=light
+set termguicolors
 colorscheme onedark
 
 " Enable python syntax highlighting

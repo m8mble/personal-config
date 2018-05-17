@@ -4,8 +4,10 @@ import argparse
 import glob
 import os.path
 import pathlib
+import shutil
 import subprocess
 import tempfile
+import urllib.request
 
 
 class Installer:
@@ -51,6 +53,12 @@ class Installer:
             subprocess.check_call(['git', 'pull'], cwd=tgt)
         else:
             subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
+
+    @staticmethod
+    def _download_file(url, tgt):
+        """ Download url into tgt (overwrite if already present). """
+        with urllib.request.urlopen(url) as response, open(tgt, 'wb') as tgt_file:
+            shutil.copyfileobj(response, tgt_file)
 
     @depends_on(
             'vim_pathogen', 'vim_powerline', 'vim_colorschemes', 'vim_python_syntax', 'vim_you_complete_me',

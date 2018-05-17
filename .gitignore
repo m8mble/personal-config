@@ -3,6 +3,7 @@
 *~
 *.bkp
 *.tmp
+*.swp
 
 # Special files not needing tracking
 TODO.md

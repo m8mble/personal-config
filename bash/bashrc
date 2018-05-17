@@ -1,4 +1,13 @@
 ############################################
+# general config
+##
+BASHRC_HOME="$(dirname "$(readlink -f "${BASH_SOURCE}")")"
+
+source "${BASHRC_HOME}/git-prompt.sh"
+source "${BASHRC_HOME}/colors.sh"
+source "${BASHRC_HOME}/ps1-helpers.sh"
+
+############################################
 # path section
 ##
 export LD_LIBRARY_PATH="${HOME}/.local/lib/:${HOME}/software/lib64/:${LD_LIBRARY_PATH}"
@@ -20,14 +29,15 @@ alias fgrpe='fgrep --color=tty -d skip'
 alias grep='grep --color=tty -d skip'
 alias grpe='grep --color=tty -d skip'
 
+
 ############################################
 # PS1 section
 ##
-POWERLINE_ROOT="$(find "${HOME}/.local/lib/" -maxdepth 3 -name powerline -type d  | sort -V | tail -1)"
-powerline-daemon -q
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
-source "${POWERLINE_ROOT}/bindings/bash/powerline.sh"
+export GIT_PS1_SHOWCOLORHINTS=true
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWSTASHSTATE=true
+export GIT_PS1_SHOWSTASHSTATE=true
+PROMPT_COMMAND='__git_ps1 "${Cyan}${User}${Color_Off}@${Green}${Host}${Color_Off} ${Blue}${PathShort}${Color_Off}" "\n\$ "'
 
 
 ############################################
@@ -38,3 +48,4 @@ if [ -f "${BASHRC_LOCAL}" ]
 then
     source "${BASHRC_LOCAL}"
 fi
+

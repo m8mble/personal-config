@@ -149,7 +149,7 @@ class Installer:
             'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh',
             self.install_source / 'bash' / 'git-prompt.sh')
 
-    @depends_on('powerline')
+    @depends_on('git_prompt')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 

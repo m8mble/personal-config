@@ -143,6 +143,12 @@ class Installer:
     def setup_vim_bufonly(self):
         Installer._update_git('https://github.com/vim-scripts/BufOnly.vim.git', self.vim_bundle / 'vim-bufonly')
 
+    @depends_on()
+    def setup_git_prompt(self):
+        Installer._download_file(
+            'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh',
+            self.install_source / 'bash' / 'git-prompt.sh')
+
     @depends_on('powerline')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')

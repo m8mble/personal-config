@@ -16,6 +16,20 @@ let python_highlight_all = 1
 " YouCompleteMe config
 " Disable identifier completer (popup as you type)
 let g:ycm_min_num_of_chars_for_completion=3
+" Add tex to the default ycm blacklist
+let g:ycm_filetype_blacklist = {
+        \ 'tagbar' : 1,
+        \ 'qf' : 1,
+        \ 'notes' : 1,
+        \ 'markdown' : 1,
+        \ 'unite' : 1,
+        \ 'text' : 1,
+        \ 'vimwiki' : 1,
+        \ 'pandoc' : 1,
+        \ 'infolog' : 1,
+        \ 'tex' : 1,
+        \ 'mail' : 1,
+        \}
 
 " CommandT config
 " Map <C-b> to open hit in horizontal split. <C-s> suspends terminal.

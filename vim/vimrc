@@ -89,7 +89,7 @@ autocmd Filetype tex setlocal shiftwidth=1 softtabstop=1 tabstop=8
 autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
 autocmd BufWritePre * %s/\s\+$//e  "Remove trailing whitespace on save
-autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>120v.\+', -1)  " Highlight lines longer than 120 chars
+set colorcolumn=121  "Highlight column 121 which is OOB.
 
 function TextModeConfig()
   if exists("b:textmodeenabled") && b:textmodeenabled==1

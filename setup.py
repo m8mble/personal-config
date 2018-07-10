@@ -2,12 +2,25 @@
 
 import argparse
 import glob
-import os.path
+import json
+import os
 import pathlib
 import shutil
 import subprocess
 import tempfile
 import urllib.request
+
+
+def _arch_match(artifacts):
+    """ Select from a list of github release assets the one matching current machine best. """
+    uname = os.uname()
+    criteria = [ uname.machine, uname.sysname ]
+    while len(artifacts) > 1:
+        criterion = criteria.pop(0).lower()
+        artifacts = [a for a in artifacts if criterion in a['name'].lower()]
+
+    assert len(artifacts) == 1, 'Can\'t select among remaining artifacts!'
+    return artifacts[0]
 
 
 class Installer:
@@ -59,6 +72,15 @@ class Installer:
         """ Download url into tgt (overwrite if already present). """
         with urllib.request.urlopen(str(url)) as response, open(tgt, 'wb') as tgt_file:
             shutil.copyfileobj(response, tgt_file)
+
+    @staticmethod
+    def _github_release_info(owner, repo, release='latest'):
+        """ Determine release details of github owner/repo repository for release as json data. """
+        url = f'https://api.github.com/repos/{owner:}/{repo:}/releases/{release:}'
+        with urllib.request.urlopen(url) as response:
+            details = json.loads(response.read())
+        details['arch_asset'] = _arch_match(details['assets'])
+        return details
 
     @depends_on(
             'vim_pathogen', 'vim_powerline', 'vim_colorschemes', 'vim_python_syntax', 'vim_you_complete_me',

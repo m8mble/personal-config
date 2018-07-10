@@ -55,9 +55,9 @@ class Installer:
             subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
 
     @staticmethod
-    def _download_file(url, tgt):
+    def _download_file(url:pathlib.Path, tgt):
         """ Download url into tgt (overwrite if already present). """
-        with urllib.request.urlopen(url) as response, open(tgt, 'wb') as tgt_file:
+        with urllib.request.urlopen(str(url)) as response, open(tgt, 'wb') as tgt_file:
             shutil.copyfileobj(response, tgt_file)
 
     @depends_on(

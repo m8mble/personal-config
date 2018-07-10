@@ -74,6 +74,28 @@ class Installer:
             shutil.copyfileobj(response, tgt_file)
 
     @staticmethod
+    def _download_archive(url, tgt):
+        """ Download url (assumed to be an archive) and extract into tgt (remove if exists). """
+        tgt = pathlib.Path(tgt)
+        if tgt.exists():
+            shutil.rmtree(str(tgt))  # TODO no str with python3.7
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            dl_tgt = pathlib.Path(tmp_dir) / pathlib.Path(url).name
+            Installer._download_file(url, dl_tgt)
+            shutil.unpack_archive(filename=str(dl_tgt), extract_dir=tgt)  # TODO: no str with python3.7
+
+        # Frequent special case: If tgt now contains exactly once child dir, replace tgt by this child.
+        child = [c for c in tgt.iterdir()]
+        if len(child) != 1 or not child[0].is_dir():
+            return  # non-unique or non-dir child
+        child = child.pop()
+
+        tmp = pathlib.Path(tempfile.mkdtemp(dir=tgt.parent))
+        child.rename(tmp)
+        tgt.rmdir()
+        pathlib.Path(tmp).rename(tgt)
+
+    @staticmethod
     def _github_release_info(owner, repo, release='latest'):
         """ Determine release details of github owner/repo repository for release as json data. """
         url = f'https://api.github.com/repos/{owner:}/{repo:}/releases/{release:}'

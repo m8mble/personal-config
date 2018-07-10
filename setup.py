@@ -241,7 +241,6 @@ def _parse_cmdline():
 def _main():
     # TODO:
     # -- xdg config: link config to ~/.config/user-dirs.dirs and call xdg-user-dirs-update
-    # -- bashrc
     # -- .profile
     args = _parse_cmdline()
     Installer().setup(*[k for k, v in args.items() if v])

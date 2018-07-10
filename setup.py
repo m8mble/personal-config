@@ -30,6 +30,8 @@ class Installer:
         self.install_source = pathlib.Path(__file__).parent.resolve()
         self.backup_dir = self.install_source / 'backup' # where we save conflicting files
         self.vim_bundle = pathlib.Path.home() / '.vim' / 'bundle'  # home to vim plugins
+        self.software = pathlib.Path.home() / 'software'
+        self.bin_dir = pathlib.Path.home() / 'bin'
 
     def setup(self, *steps):
         """ Setup main method: Calls setup_* handlers for specified steps. """
@@ -193,7 +195,7 @@ class Installer:
             'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh',
             self.install_source / 'bash' / 'git-prompt.sh')
 
-    @depends_on('git_prompt')
+    @depends_on('git_prompt', 'ripgrep')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
@@ -205,6 +207,18 @@ class Installer:
                 git_tgt = pathlib.Path(workarea).resolve() / 'kde-colors-solarized'
                 Installer._update_git('https://github.com/hayalci/kde-colors-solarized.git', git_tgt)
                 subprocess.check_call(['bash', 'install.sh'], cwd=git_tgt)
+
+    @depends_on()
+    def setup_ripgrep(self):
+        rg = 'ripgrep'
+        info = Installer._github_release_info(owner='BurntSushi', repo=rg)
+        tgt = pathlib.Path(self.software / rg / f'{rg:}-{info["name"]:}')
+        # Download non-existing
+        if not tgt.exists():
+            Installer._download_archive(info['arch_asset']['browser_download_url'], tgt)
+        # Update links: latest and in bin
+        self._link_config(tgt, tgt.parent / 'latest', target_is_directory=True)
+        self._link_config(tgt / 'rg', self.bin_dir / 'rg')
 
 
 ####################################################################################

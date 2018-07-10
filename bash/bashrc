@@ -10,6 +10,7 @@ source "${BASHRC_HOME}/ps1-helpers.sh"
 # Import coloring for ls
 eval $(dircolors "${BASHRC_HOME}/dircolors.config")
 
+
 ############################################
 # path section
 ##
@@ -31,6 +32,12 @@ alias fgrep='fgrep --color=tty -d skip'
 alias fgrpe='fgrep --color=tty -d skip'
 alias grep='grep --color=tty -d skip'
 alias grpe='grep --color=tty -d skip'
+
+
+############################################
+# autocomplete section
+##
+source "${HOME}/software/ripgrep/latest/complete/rg.bash"
 
 
 ############################################

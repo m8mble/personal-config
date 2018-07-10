@@ -153,6 +153,7 @@ class Installer:
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
+    @depends_on()
     def setup_kde(self):
         search = pathlib.Path.home() / '.kde*' / 'share' / 'apps' / 'konsole' / 'Solarized*.colorscheme'
         if not glob.glob(str(search)):  # Check that we didn't install already

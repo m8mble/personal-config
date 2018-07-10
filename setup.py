@@ -35,7 +35,7 @@ class Installer:
             return wrapper
         return decorator
 
-    def _link_config(self, src, tgt):
+    def _link_config(self, src, tgt, **kwargs):
         """ Create new link at tgt referencing src. """
         # Save conflicts if any
         if tgt.exists() and tgt.resolve() != src:
@@ -44,7 +44,7 @@ class Installer:
             tgt.rename(self.backup_dir / tgt.name)
         # Ensure link (if not already ok)
         if not tgt.exists():
-            tgt.symlink_to(os.path.relpath(src, start=tgt.parent))
+            tgt.symlink_to(os.path.relpath(src, start=tgt.parent), **kwargs)
 
     @staticmethod
     def _update_git(src, tgt):

@@ -14,7 +14,7 @@ import urllib.request
 def _arch_match(artifacts):
     """ Select from a list of github release assets the one matching current machine best. """
     uname = os.uname()
-    criteria = [ uname.machine, uname.sysname ]
+    criteria = [uname.machine, uname.sysname]
     while len(artifacts) > 1:
         criterion = criteria.pop(0).lower()
         artifacts = [a for a in artifacts if criterion in a['name'].lower()]
@@ -25,10 +25,10 @@ def _arch_match(artifacts):
 
 class Installer:
     def __init__(self):
-        self.done = set() # set of installers already executed
+        self.done = set()  # set of installers already executed
 
         self.install_source = pathlib.Path(__file__).parent.resolve()
-        self.backup_dir = self.install_source / 'backup' # where we save conflicting files
+        self.backup_dir = self.install_source / 'backup'  # where we save conflicting files
         self.vim_bundle = pathlib.Path.home() / '.vim' / 'bundle'  # home to vim plugins
         self.software = pathlib.Path.home() / 'software'
         self.bin_dir = pathlib.Path.home() / 'bin'
@@ -42,8 +42,8 @@ class Installer:
         """ Builds decorator that ensures setup for requirements.  """
         def decorator(installer):
             def wrapper(self):
-                self.setup(*requirements) # First our requirements
-                if installer.__name__ not in self.done: # Now actual work iff needed
+                self.setup(*requirements)  # First our requirements
+                if installer.__name__ not in self.done:  # Now actual work iff needed
                     print('Installing {:}'.format(installer.__name__.replace('setup_', '').replace('_', '-')))
                     installer(self)
                     self.done.add(installer.__name__)
@@ -70,7 +70,7 @@ class Installer:
             subprocess.check_call(['git', 'clone', '--recurse-submodules', src, tgt])
 
     @staticmethod
-    def _download_file(url:pathlib.Path, tgt):
+    def _download_file(url: pathlib.Path, tgt):
         """ Download url into tgt (overwrite if already present). """
         with urllib.request.urlopen(str(url)) as response, open(tgt, 'wb') as tgt_file:
             shutil.copyfileobj(response, tgt_file)
@@ -128,7 +128,8 @@ class Installer:
             subprocess.check_call('git pull'.split(), cwd=font_repo)
         else:
             print('Cloning powerline fonts')
-            subprocess.check_call('git clone --depth=1 https://github.com/powerline/fonts.git'.split() + [str(font_repo)])
+            subprocess.check_call(
+                'git clone --depth=1 https://github.com/powerline/fonts.git'.split() + [str(font_repo)])
 
         print('Installing powerline fonts')
         subprocess.check_call('bash install.sh'.split(), cwd=font_repo)
@@ -136,7 +137,7 @@ class Installer:
         print('Setting up powerline config')
         self._link_config(self.install_source / 'powerline', pathlib.Path.home() / '.config' / 'powerline')
 
-        #TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
+        # TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
     @depends_on()
     def setup_vim_pathogen(self):
@@ -150,7 +151,10 @@ class Installer:
 
     @depends_on('vim_pathogen')
     def setup_vim_colorschemes(self):
-        for github, tgt in [('zeis/vim-kolor', 'vim-kolor'), ('morhetz/gruvbox', 'vim-gruvbox'), ('joshdick/onedark.vim', 'vim-onedark')]:
+        schemes = [
+            ('zeis/vim-kolor', 'vim-kolor'), ('morhetz/gruvbox', 'vim-gruvbox'), ('joshdick/onedark.vim', 'vim-onedark')
+        ]
+        for github, tgt in schemes:
             Installer._update_git('https://github.com/{:}.git'.format(github), self.vim_bundle / tgt)
 
     @depends_on('vim_pathogen')
@@ -159,7 +163,8 @@ class Installer:
 
     @depends_on('powerline')
     def setup_vim_powerline(self):
-        installs = glob.glob(str(pathlib.Path.home() / '.local' / '**' / 'powerline' / 'bindings' / 'vim'), recursive=True)
+        installs = glob.glob(
+            str(pathlib.Path.home() / '.local' / '**' / 'powerline' / 'bindings' / 'vim'), recursive=True)
         assert len(installs) == 1, 'Can\'t select among powerline installs {:}'.format(installs)
         self._link_config(pathlib.Path(installs[0]), self.vim_bundle / 'vim-powerline')
 
@@ -230,6 +235,7 @@ def _load_parser():
     parser.add_argument('--bash', help='Setup bash config.', action='store_true')
     return parser
 
+
 def _parse_cmdline():
     # Parse cmdline
     args = vars(_load_parser().parse_args())
@@ -238,12 +244,14 @@ def _parse_cmdline():
         args.update({step: True for step in args.keys()})
     return args
 
+
 def _main():
     # TODO:
     # -- xdg config: link config to ~/.config/user-dirs.dirs and call xdg-user-dirs-update
     # -- .profile
     args = _parse_cmdline()
     Installer().setup(*[k for k, v in args.items() if v])
+
 
 if __name__ == '__main__':
     _main()

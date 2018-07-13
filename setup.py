@@ -118,7 +118,7 @@ class Installer:
 
     @depends_on()
     def setup_powerline(self):
-        subprocess.check_call('pip install --user --upgrade powerline-status'.split())
+        subprocess.check_call('pip3 install --user --upgrade powerline-status'.split())
 
         # Get powerline fonts
         font_repo = pathlib.Path.home() / 'software' / 'powerline-fonts'

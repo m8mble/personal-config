@@ -116,7 +116,8 @@ augroup clear_trailing_whitespace
    " Clear trailing whitespace
    autocmd BufWritePre * :call StripTrailingWhitespace()
 augroup END
-autocmd FileType diff autocmd! clear_trailing_whitespace " Clear clear_trailing_whitespace group, for certain files
+" Clear clear_trailing_whitespace group, for certain files
+autocmd FileType diff autocmd! clear_trailing_whitespace
 set colorcolumn=121  "Highlight column 121 which is OOB.
 
 function! TextModeConfig()

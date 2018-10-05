@@ -35,6 +35,10 @@ let g:ycm_filetype_blacklist = {
 " CommandT config
 " Map <C-b> to open hit in horizontal split. <C-s> suspends terminal.
 map <C-b> <C-s>
+" Enable <ESC> for closing the cmd-T buffer (taken from official help)
+if &term =~ "xterm" || &term =~ "screen"
+  let g:CommandTCancelMap = ['<ESC>', '<C-c>']
+ endif
 
 " Filebrowsing (netrw) config
 let g:netrw_banner=0        " disable annoying banner

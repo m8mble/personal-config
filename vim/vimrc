@@ -33,6 +33,8 @@ let g:ycm_filetype_blacklist = {
         \}
 
 " CommandT config
+" Use `git ls-files` for finding files. Consequently git-ignored files won't appear in the hitlist.
+let g:CommandTFileScanner = "git"
 " Map <C-b> to open hit in horizontal split. <C-s> suspends terminal.
 map <C-b> <C-s>
 " Enable <ESC> for closing the cmd-T buffer (taken from official help)

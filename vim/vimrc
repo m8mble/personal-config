@@ -76,6 +76,7 @@ set hls
 "set fo=qrotcnl1
 set bs=indent,eol,start
 set list
+set mouse=a  " let vim interact with the mouse directly
 
 " Enable adaptive line numbers (ie relative in insert)
 :set number relativenumber

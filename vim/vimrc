@@ -53,10 +53,12 @@ set cursorline  " Highlight line where cursor currently is
 
 
 " Custom keybinding
+command! ClearQuickfixList cexpr []
 imap <F8> <ESC><F8>
 cmap <F8> <ESC><F8>
 " Shortcut for writting in all (changed) buffers and building on all cores.
-nmap <F8> :wa<CR>:make -j$(grep -c ^processor /proc/cpuinfo)<CR>
+" Recall that make! (in contrast to make) will not jump to first quickfix error.
+nmap <F8> :wa<CR>:make! -j$(grep -c ^processor /proc/cpuinfo)<CR>
 " Moving between tabs
 nmap <F5> :tabprevious<CR>
 nmap <F6> :tabnext<CR>

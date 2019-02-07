@@ -67,7 +67,6 @@ set nocompatible  " Don't pretend to be vi
 set splitright  " Create vsp buffers to the right
 set splitbelow  " Create sp buffers to the bottom
 set nofoldenable
-set number  " Enable line numbers
 set sts=3
 filetype on
 filetype indent on
@@ -77,6 +76,14 @@ set hls
 "set fo=qrotcnl1
 set bs=indent,eol,start
 set list
+
+" Enable adaptive line numbers (ie relative in insert)
+:set number relativenumber
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+:augroup END
 
 if v:version >= 700
    set lcs=trail:·,precedes:«,extends:»,nbsp:◊,tab:»·

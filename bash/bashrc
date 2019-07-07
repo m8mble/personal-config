@@ -8,7 +8,7 @@ source "${BASHRC_HOME}/colors.sh"
 source "${BASHRC_HOME}/ps1-helpers.sh"
 
 # Import coloring for ls
-eval $(dircolors "${BASHRC_HOME}/dircolors.config")
+eval $(dircolors "${BASHRC_HOME}/../dircolors.config")
 
 
 ############################################

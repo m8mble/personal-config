@@ -16,12 +16,22 @@ export EDITOR=nvim
 # Export rg configuration
 function update_ripgreprc() {
    export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
-   # Start with master config; remove existing (potentially outdated)
-   cat "${RIPGREP_CONFIG_PATH}.master" > "${RIPGREP_CONFIG_PATH}"
-   # Append local config (if any)
+   RIPGREP_MASTER_CONFIG="${RIPGREP_CONFIG_PATH}.master"
    RIPGREP_LOCAL_CONFIG="${RIPGREP_CONFIG_PATH}.local"
-   if [ -f "${RIPGREP_LOCAL_CONFIG}" ];
+
+   # Check whether current config is up to date
+   if [[    ( "${RIPGREP_CONFIG_PATH}" -nt "${RIPGREP_MASTER_CONFIG}" )
+         && (   ( ! -f "${RIPGREP_LOCAL_CONFIG}" )
+             || ( "${RIPGREP_CONFIG_PATH}" -nt "${RIPGREP_LOCAL_CONFIG}" ) ) ]];
    then
+      # Config up to date
+      return;
+   fi
+
+   # Start with master config; remove existing (potentially outdated)
+   cat "${RIPGREP_MASTER_CONFIG}" > "${RIPGREP_CONFIG_PATH}"
+   # Append local config (if any)
+   if [ -f "${RIPGREP_LOCAL_CONFIG}" ]; then
       cat "${RIPGREP_LOCAL_CONFIG}" >> "${RIPGREP_CONFIG_PATH}"
    fi
 }

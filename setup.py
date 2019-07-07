@@ -200,7 +200,7 @@ class Installer:
             'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh',
             self.install_source / 'bash' / 'git-prompt.sh')
 
-    @depends_on('git_prompt', 'ripgrep')
+    @depends_on('git_prompt', 'ripgrep_config')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
@@ -226,11 +226,15 @@ class Installer:
         self._link_config(tgt / 'rg', self.bin_dir / 'rg')
 
     @depends_on()
+    def setup_ripgrep_config(self):
+        self._link_config(self.install_source / 'ripgrep.config', pathlib.Path.home() / '.ripgreprc.master')
+
+    @depends_on()
     def setup_oh_my_zsh(self):
         install = self.software / 'oh-my-zsh'
         Installer._update_git('https://github.com/robbyrussell/oh-my-zsh.git', self.software / 'oh-my-zsh')
 
-    @depends_on('oh_my_zsh')
+    @depends_on('oh_my_zsh', 'ripgrep_config')
     def setup_zsh(self):
         self._link_config(self.install_source / 'profile', pathlib.Path.home() / '.zprofile')
         self._link_config(self.install_source / 'zsh' / 'zshrc', pathlib.Path.home() / '.zshrc')
@@ -243,6 +247,7 @@ def _load_parser():
     parser.add_argument('--vim', help='Setup vim config.', action='store_true')
     parser.add_argument('--bash', help='Setup bash config.', action='store_true')
     parser.add_argument('--zsh', help='Setup zsh config.', action='store_true')
+    parser.add_argument('--ripgrep', help='Install latest rg release from github.', action='store_true')
     return parser
 
 

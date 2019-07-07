@@ -11,6 +11,24 @@ export EDITOR=nvim
 
 
 ########################################################################################################################
+# Application specific configurations
+
+# Export rg configuration
+function update_ripgreprc() {
+   export RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
+   # Start with master config; remove existing (potentially outdated)
+   cat "${RIPGREP_CONFIG_PATH}.master" > "${RIPGREP_CONFIG_PATH}"
+   # Append local config (if any)
+   RIPGREP_LOCAL_CONFIG="${RIPGREP_CONFIG_PATH}.local"
+   if [ -f "${RIPGREP_LOCAL_CONFIG}" ];
+   then
+      cat "${RIPGREP_LOCAL_CONFIG}" >> "${RIPGREP_CONFIG_PATH}"
+   fi
+}
+update_ripgreprc
+
+
+########################################################################################################################
 # Aliases
 
 if [[ "$(uname -s)" == "Darwin" ]]

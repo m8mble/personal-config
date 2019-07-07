@@ -246,12 +246,11 @@ class Installer:
 
     @depends_on()
     def setup_oh_my_zsh(self):
-        install = self.software / 'oh-my-zsh'
         Installer._update_git('https://github.com/robbyrussell/oh-my-zsh.git', self.software / 'oh-my-zsh')
 
     @depends_on('oh_my_zsh', 'ripgrep_config')
     def setup_zsh(self):
-        self._link_config(self.install_source / 'profile', pathlib.Path.home() / '.zprofile')
+        self._link_config(self.install_source / 'profile', pathlib.Path.home() / '.zshenv')
         self._link_config(self.install_source / 'zsh' / 'zshrc', pathlib.Path.home() / '.zshrc')
 
 ####################################################################################

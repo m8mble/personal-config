@@ -33,6 +33,9 @@ class Installer:
         self.software = pathlib.Path.home() / 'software'
         self.bin_dir = pathlib.Path.home() / 'bin'
 
+        # Ensure platform specifics
+        self.setup_platform()
+
     def setup(self, *steps):
         """ Setup main method: Calls setup_* handlers for specified steps. """
         for step in steps:
@@ -105,6 +108,18 @@ class Installer:
             details = json.loads(response.read())
         details['arch_asset'] = _arch_match(details['assets'])
         return details
+
+    @depends_on()
+    def setup_platform(self):
+        uname = os.uname()
+        if uname.sysname == 'Darwin':
+            self.setup_macos()
+
+    @depends_on()
+    def setup_macos(self):
+        brewfile = self.install_source / 'Brewfile'
+        subprocess.check_call([
+            'brew', 'bundle', 'install', '--verbose', '--no-upgrade', f'--file={brewfile.resolve()}'])
 
     @depends_on(
             'vim_pathogen', 'vim_powerline', 'vim_colorschemes', 'vim_python_syntax', 'vim_you_complete_me',

@@ -28,6 +28,9 @@ fi
 alias lr="${LS} -ltrah --color=auto"
 alias ll="${LS} -lah --color=auto"
 
+# Create directory and enter it
+function mkcd() { mkdir -p "${@}" && cd "${_}"; }
+
 
 ########################################################################################################################
 # Development

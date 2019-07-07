@@ -225,6 +225,15 @@ class Installer:
         self._link_config(tgt, tgt.parent / 'latest', target_is_directory=True)
         self._link_config(tgt / 'rg', self.bin_dir / 'rg')
 
+    @depends_on()
+    def setup_oh_my_zsh(self):
+        install = self.software / 'oh-my-zsh'
+        Installer._update_git('https://github.com/robbyrussell/oh-my-zsh.git', self.software / 'oh-my-zsh')
+
+    @depends_on('oh_my_zsh')
+    def setup_zsh(self):
+        self._link_config(self.install_source / 'profile', pathlib.Path.home() / '.zprofile')
+        self._link_config(self.install_source / 'zsh' / 'zshrc', pathlib.Path.home() / '.zshrc')
 
 ####################################################################################
 
@@ -233,6 +242,7 @@ def _load_parser():
     parser = argparse.ArgumentParser(description='Create my favorite environment.')
     parser.add_argument('--vim', help='Setup vim config.', action='store_true')
     parser.add_argument('--bash', help='Setup bash config.', action='store_true')
+    parser.add_argument('--zsh', help='Setup zsh config.', action='store_true')
     return parser
 
 

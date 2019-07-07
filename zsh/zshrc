@@ -1,0 +1,115 @@
+########################################################################################################################
+# General setup
+
+# Actual home of this config (kudos to https://stackoverflow.com/a/28336473/2747160)
+ZSHRC_HOME="$(dirname "$(readlink -f "${(%):-%x}")")"
+
+
+########################################################################################################################
+# oh-my-zsh config
+
+export ZSH="${HOME}/software/oh-my-zsh"
+ZSH_THEME="agnoster"
+
+# Configure default user which is hidden in PS1 prompt.
+DEFAULT_USER="${USER}"
+
+# case-sensitive completion.
+CASE_SENSITIVE="true"
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Configure timestamp format for history command.
+HIST_STAMPS="yyyy-mm-dd"
+
+# Essential plugins
+plugins=(git virtualenv colored-man-pages autojump)
+
+# And now the magic...
+source $ZSH/oh-my-zsh.sh
+
+
+########################################################################################################################
+# User configuration
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=10000
+
+# Enable intelligent handling of */ and **/
+setopt extendedglob
+
+# Enable ls coloring
+eval "$(dircolors -b "${ZSHRC_HOME}/../dircolors.config")"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+# unused fallback for MacOs / Darwin `ls`
+export CLICOLOR=1
+
+
+########################################################################################################################
+# Key handling
+
+# Enable vi keybindings
+bindkey -v
+
+bindkey '^R' history-incremental-search-backward
+bindkey '^[1~' beginning-of-line
+bindkey "\e[F" end-of-line
+bindkey "\e[3~" delete-char
+
+# Fix various other "standard" keybindings; copied from the arch linux wiki.
+typeset -g -A key
+
+key[Home]="${terminfo[khome]}"
+key[End]="${terminfo[kend]}"
+key[Insert]="${terminfo[kich1]}"
+key[Backspace]="${terminfo[kbs]}"
+key[Delete]="${terminfo[kdch1]}"
+key[Up]="${terminfo[kcuu1]}"
+key[Down]="${terminfo[kcud1]}"
+key[Left]="${terminfo[kcub1]}"
+key[Right]="${terminfo[kcuf1]}"
+key[PageUp]="${terminfo[kpp]}"
+key[PageDown]="${terminfo[knp]}"
+key[ShiftTab]="${terminfo[kcbt]}"
+
+# setup key accordingly
+[[ -n "${key[Home]}"      ]] && bindkey -- "${key[Home]}"      beginning-of-line
+[[ -n "${key[End]}"       ]] && bindkey -- "${key[End]}"       end-of-line
+[[ -n "${key[Insert]}"    ]] && bindkey -- "${key[Insert]}"    overwrite-mode
+[[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
+[[ -n "${key[Delete]}"    ]] && bindkey -- "${key[Delete]}"    delete-char
+[[ -n "${key[Up]}"        ]] && bindkey -- "${key[Up]}"        up-line-or-history
+[[ -n "${key[Down]}"      ]] && bindkey -- "${key[Down]}"      down-line-or-history
+[[ -n "${key[Left]}"      ]] && bindkey -- "${key[Left]}"      backward-char
+[[ -n "${key[Right]}"     ]] && bindkey -- "${key[Right]}"     forward-char
+[[ -n "${key[PageUp]}"    ]] && bindkey -- "${key[PageUp]}"    beginning-of-buffer-or-history
+[[ -n "${key[PageDown]}"  ]] && bindkey -- "${key[PageDown]}"  end-of-buffer-or-history
+[[ -n "${key[ShiftTab]}"  ]] && bindkey -- "${key[ShiftTab]}"  reverse-menu-complete
+
+# Finally, make sure the terminal is in application mode, when zle is
+# active. Only then are the values from $terminfo valid.
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+	autoload -Uz add-zle-hook-widget
+	function zle_application_mode_start {
+		echoti smkx
+	}
+	function zle_application_mode_stop {
+		echoti rmkx
+	}
+	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+fi

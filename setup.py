@@ -155,14 +155,21 @@ class Installer:
         # TODO remainder of https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
 
     @depends_on()
+    def setup_pathogen(self):
+        Installer._update_git('https://github.com/tpope/vim-pathogen.git', self.software / 'pathogen')
+
+    @depends_on('pathogen')
     def setup_vim_pathogen(self):
         self.vim_bundle.mkdir(exist_ok=True, parents=True)
         autoload = self.vim_bundle.parent / 'autoload'
         autoload.mkdir(exist_ok=True, parents=True)
+        self._link_config(self.software / 'pathogen' / 'autoload' / 'pathogen.vim', autoload / 'pathogen.vim')
 
-        install = self.vim_bundle / 'vim-pathogen'
-        Installer._update_git('https://github.com/tpope/vim-pathogen.git', install)
-        self._link_config(install / 'autoload' / 'pathogen.vim', autoload / 'pathogen.vim')
+    @depends_on('pathogen')
+    def setup_neovim_pathogen(self):
+        autoload = pathlib.Path.home() / '.config' / 'nvim' / 'autoload'
+        autoload.mkdir(exist_ok=True, parents=True)
+        self._link_config(self.software / 'pathogen' / 'autoload' / 'pathogen.vim', autoload / 'pathogen.vim')
 
     @depends_on('vim_pathogen')
     def setup_vim_colorschemes(self):
@@ -253,12 +260,44 @@ class Installer:
         self._link_config(self.install_source / 'profile', pathlib.Path.home() / '.zshenv')
         self._link_config(self.install_source / 'zsh' / 'zshrc', pathlib.Path.home() / '.zshrc')
 
+    @depends_on('neovim_pathogen')
+    def setup_neovim_ack(self):
+        Installer._update_git('https://github.com/mileszs/ack.vim', self.software / 'neovim-ack')
+
+    @depends_on('neovim_pathogen')
+    def setup_neovim_ctrlp(self):
+        Installer._update_git('https://github.com/ctrlpvim/ctrlp.vim.git', self.software / 'neovim-ctrlp')
+
+    @depends_on('neovim_pathogen', 'neovim_languageclient')
+    def setup_neovim_deoplete(self):
+        Installer._update_git('https://github.com/Shougo/deoplete.nvim', self.software / 'neovim-deoplete')
+        subprocess.check_call(['nvim', '+PlugInstall', '+UpdateRemotePlugins', '+qa'])
+
+    @depends_on('neovim_pathogen')
+    def setup_neovim_languageclient(self):
+        install = self.software / 'neovim-languageclient'
+        Installer._update_git('https://github.com/autozimu/LanguageClient-neovim.git', install)
+        subprocess.check_call([str(install / 'install.sh')])
+        # TODO pip3 install python-language-server
+        self._link_config(self.install_source / 'pycodestyle', pathlib.Path.home() / '.config' / 'pycodestyle')
+
+
+    @depends_on('neovim_pathogen')
+    def setup_neovim_solarized(self):
+        Installer._update_git('https://github.com/icymind/NeoSolarized.git', self.software / 'neovim-solarized')
+
+    @depends_on('neovim_ack', 'neovim_solarized', 'neovim_ctrlp', 'neovim_deoplete')
+    def setup_neovim(self):
+        self._link_config(self.install_source / 'init.neovim', pathlib.Path.home() / '.config' / 'nvim' / 'init.vim')
+
+
 ####################################################################################
 
 
 def _load_parser():
     parser = argparse.ArgumentParser(description='Create my favorite environment.')
     parser.add_argument('--vim', help='Setup vim config.', action='store_true')
+    parser.add_argument('--neovim', help='Setup neovim config.', action='store_true')
     parser.add_argument('--bash', help='Setup bash config.', action='store_true')
     parser.add_argument('--zsh', help='Setup zsh config.', action='store_true')
     parser.add_argument('--ripgrep', help='Install latest rg release from github.', action='store_true')

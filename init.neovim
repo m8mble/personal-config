@@ -1,0 +1,141 @@
+" Load pathogen
+execute pathogen#infect('~/software/neovim-{}')
+
+syntax enable
+
+" Color scheme
+set background=light
+colorscheme NeoSolarized
+
+" Enable python syntax highlighting
+let python_highlight_all = 1
+
+" Filebrowsing (netrw) config
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
+
+" CtrlP config
+"" Exclude git-ignored files
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+"" Use rg over grep (ripgrep)
+if executable('ag')
+  set grepprg=rg\ --no-heading\ --color=never
+endif
+
+" ack.vim config
+"" Use ripgrep
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
+endif
+" Allow using rg for Ack
+cabbrev rg Ack
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+" LanguageClient-neovim config
+let g:LanguageClient_serverCommands = {
+  \ 'python': ['~/.local/bin/pyls'],
+  \ }
+nnoremap <c-space> :call LanguageClient_contextMenu()<CR>
+
+" Enable deoplete
+let g:deoplete#enable_at_startup = 1
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><shift><tab> pumvisible() ? "\<c-p>" : "\<shift><tab>"
+
+set laststatus=2  " Always display statusbar (ie. powerline)
+set cursorline  " Highlight line where cursor currently is
+
+
+" Custom keybinding
+command! ClearQuickfixList cexpr []
+imap <F8> <ESC><F8>
+cmap <F8> <ESC><F8>
+" Shortcut for writting in all (changed) buffers and building on all cores.
+" Recall that make! (in contrast to make) will not jump to first quickfix error.
+nmap <F8> :wa<CR>:make! -j$(grep -c ^processor /proc/cpuinfo)<CR>
+" Moving between tabs
+nmap <F5> :tabprevious<CR>
+nmap <F6> :tabnext<CR>
+" Allow W (upper case) for w; helps correcting a common typo of mine.
+cabbrev W w
+
+set nocompatible  " Don't pretend to be vi
+set splitright  " Create vsp buffers to the right
+set splitbelow  " Create sp buffers to the bottom
+set nofoldenable
+set sts=3
+filetype on
+filetype indent on
+set et
+set sw=3
+set hls
+"set fo=qrotcnl1
+set bs=indent,eol,start
+set list
+set mouse=a  " let vim interact with the mouse directly
+set clipboard+=unnamedplus  " may yanks become copies
+" Workaround to (often) make the mousebuffer behave as expected
+vmap <LeftRelease> "*ygv
+
+" Enable adaptive line numbers (ie relative in insert)
+:set number relativenumber
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+:augroup END
+
+if v:version >= 700
+   set lcs=trail:·,precedes:«,extends:»,nbsp:◊,tab:»·
+else
+   set listchars=tab:>-,trail:-
+endif
+
+autocmd FileType c call MyC()
+autocmd FileType cpp call MyC()
+
+" TODO: some shortcut for :noh<CR> to disable search highlighting
+map  <Up>        gk
+imap <Up>   <C-O>gk
+map  <Down>      gj
+imap <Down> <C-O>gj
+
+function! MyC()
+   set cindent
+   set cino=(0,W1s,m1
+endfunction
+
+set expandtab       "Use softtabstop spaces instead of tab characters for indentation
+set shiftwidth=3    "Indent by 4 spaces when using >>, <<, == etc.
+set softtabstop=3   "Indent by 4 spaces when pressing <TAB>
+
+set autoindent      "Keep indentation from previous line
+set smartindent     "Automatically inserts indentation in some cases
+set cindent         "Like smartindent, but stricter and more customisable
+
+autocmd Filetype gitcommit setlocal textwidth=72
+autocmd Filetype python setlocal shiftwidth=4 softtabstop=4 tabstop=8
+autocmd Filetype tex setlocal shiftwidth=1 softtabstop=1 tabstop=8
+autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
+
+function! StripTrailingWhitespace()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+
+augroup clear_trailing_whitespace
+   " Remove previously defined autocmds in this group
+   autocmd!
+   " Clear trailing whitespace
+   autocmd BufWritePre * :call StripTrailingWhitespace()
+augroup END
+" Clear clear_trailing_whitespace group, for certain files
+autocmd FileType diff autocmd! clear_trailing_whitespace
+set colorcolumn=121  "Highlight column 121 which is OOB.
+

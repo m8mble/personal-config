@@ -67,9 +67,9 @@ UBSAN_OPTIONS=print_stacktrace=1
 
 ########################################################################################################################
 # Source local overwrites if present
-BASHRC_LOCAL="${HOME}/.profile.local"
-if [ -f "${BASHRC_LOCAL}" ]
+PROFILE_LOCAL="${HOME}/.profile.local"
+if [ -f "${PROFILE_LOCAL}" ]
 then
-    source "${BASHRC_LOCAL}"
+    source "${PROFILE_LOCAL}"
 fi
 

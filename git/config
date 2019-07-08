@@ -1,6 +1,3 @@
-[alias]
-   rbi = rebase -i --autosquash --autostash
-
 [core]
    excludesfile = ~/.gitignore
    whitespace = trailing-space,space-before-tab,indent-with-tab

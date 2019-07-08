@@ -222,7 +222,7 @@ class Installer:
             'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh',
             self.install_source / 'bash' / 'git-prompt.sh')
 
-    @depends_on('git_prompt', 'ripgrep_config')
+    @depends_on('git_prompt', 'ripgrep_config', 'git')
     def setup_bash(self):
         self._link_config(self.install_source / 'bash' / 'bashrc', pathlib.Path.home() / '.bashrc')
 
@@ -255,7 +255,7 @@ class Installer:
     def setup_oh_my_zsh(self):
         Installer._update_git('https://github.com/robbyrussell/oh-my-zsh.git', self.software / 'oh-my-zsh')
 
-    @depends_on('oh_my_zsh', 'ripgrep_config')
+    @depends_on('oh_my_zsh', 'ripgrep_config', 'git')
     def setup_zsh(self):
         self._link_config(self.install_source / 'profile', pathlib.Path.home() / '.zshenv')
         self._link_config(self.install_source / 'zsh' / 'zshrc', pathlib.Path.home() / '.zshrc')
@@ -289,6 +289,12 @@ class Installer:
     @depends_on('neovim_ack', 'neovim_solarized', 'neovim_ctrlp', 'neovim_deoplete')
     def setup_neovim(self):
         self._link_config(self.install_source / 'init.neovim', pathlib.Path.home() / '.config' / 'nvim' / 'init.vim')
+
+    @depends_on() # maybe diff-so-fancy
+    def setup_git(self):
+        self._link_config(self.install_source / 'git' / 'config', pathlib.Path.home() / '.gitconfig')
+        self._link_config(self.install_source / 'git' / 'ignore', pathlib.Path.home() / '.gitignore')
+
 
 
 ####################################################################################

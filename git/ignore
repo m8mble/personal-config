@@ -1,0 +1,9 @@
+# Clion config
+.idea/
+# Python pyc
+site-packages/
+# Compilation databases
+compile_commands.json
+# Editor temporaries
+*~
+*.swp

@@ -1,0 +1,57 @@
+[alias]
+   rbi = rebase -i --autosquash --autostash
+
+[core]
+   excludesfile = ~/.gitignore
+   whitespace = trailing-space,space-before-tab,indent-with-tab
+   pager = diff-so-fancy | less --tabs=4 -RFX
+
+[column]
+   ui = auto
+
+[merge]
+   conflictstyle = diff3
+
+[log]
+   decorate = full
+   color-moved = true
+
+[diff]
+   tool = meld
+
+[difftool]
+   prompt = false
+
+[merge]
+   tool = mymeld
+   conflictstyle = diff3
+
+[mergetool "mymeld"]
+   cmd = meld $LOCAL $BASE $REMOTE -o $MERGED --auto-merge
+
+[rebase]
+   autostash = true
+
+[stash]
+   showPatch = true
+
+[pull]
+   ff = only
+   rebase = true
+
+[push]
+   recurseSubmodules = on-demand
+
+[fetch]
+   recurseSubmodules = on-demand
+
+[alias]
+   rbi = rebase -i --autosquash
+
+[tig "bind"]
+   generic = I !git rbi %(commit)
+   generic = x !git commit --fixup=%(commit)
+
+# Add local overwrites
+[include]
+   path = ~/.gitconfig.local

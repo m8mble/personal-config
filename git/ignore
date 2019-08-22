@@ -7,3 +7,5 @@ compile_commands.json
 # Editor temporaries
 *~
 *.swp
+# Apple directory files
+.DS_Store

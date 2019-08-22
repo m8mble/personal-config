@@ -58,6 +58,7 @@ alias ll="${LS} -lah --color=auto"
 
 # Create directory and enter it
 function mkcd() { mkdir -p "${@}" && cd "${_}"; }
+function rmkcd() { rm -rf "${@}" && mkcd "${@}"; }
 
 
 ########################################################################################################################

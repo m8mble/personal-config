@@ -4,6 +4,8 @@
 # Actual home of this config (kudos to https://stackoverflow.com/a/28336473/2747160)
 ZSHRC_HOME="$(dirname "$(readlink -f "${(%):-%x}")")"
 
+# Enable vi keybindings (enable upfront st oh-my-zsh may overwrite certain keybindings)
+bindkey -v
 
 ########################################################################################################################
 # oh-my-zsh config
@@ -35,7 +37,13 @@ CASE_SENSITIVE="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 # Essential plugins
-plugins=(git virtualenv colored-man-pages autojump)
+plugins=(
+   autojump
+   colored-man-pages
+   fzf
+   git
+   virtualenv
+)
 
 # And now the magic...
 source $ZSH/oh-my-zsh.sh
@@ -62,10 +70,6 @@ export CLICOLOR=1
 ########################################################################################################################
 # Key handling
 
-# Enable vi keybindings
-bindkey -v
-
-bindkey '^R' history-incremental-search-backward
 bindkey '^[1~' beginning-of-line
 bindkey "\e[F" end-of-line
 bindkey "\e[3~" delete-char
